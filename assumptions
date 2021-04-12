@@ -1,0 +1,4 @@
+1. se crean las mínimas dimensiones que cumplan con los requerimientos del enunciado (batallón y distrito) con id espejado con el index + 1 que se cargaran full antes de cargar la fact
+2. fact table de fire_incidents con carga full todos los días
+3. se recuperan los id's subrogados de las dimensiones directamente desde el dataframe para hacer left join entre fact_df y dim_x_df
+4. para las aggregate queries de time_period dado que conceptualmente refleja cronología, se la accederá con queries directamente desde la fact table - no me pareció relevante crear una dimension de tiempo
