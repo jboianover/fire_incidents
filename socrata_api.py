@@ -10,4 +10,10 @@ def extract_data():
     
     client = Socrata(client_name, None)
     results = client.get(file_name, limit=limit_size)
-    return pd.DataFrame.from_records(results)
+
+    df = pd.DataFrame.from_records(results)
+
+    df.columns = df.columns.str.replace(' ', '_')
+    df.columns = df.columns.str.replace('sytem', 'system')
+    
+    return df

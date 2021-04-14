@@ -2,3 +2,13 @@
 2. load dimensions
 3. load fact table (lookup to dimensions for id's)
 4. reports
+
+
+
+- reemplazo espacio por guión bajo en los atributos del Source
+- arreglo el Sytem --> System en el nombre de las columnas
+- en el .ini pongo las dimensiones a cargar con guión bajo en vez de espacio también
+- las dimensiones estandar con la iteración como vengo haciendo
+- las dimensiones compartidas tienen que ir en una lista especial (como?)
+
+funcion para dimensiones default de la lista
