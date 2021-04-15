@@ -25,10 +25,11 @@
 ---
 ### Algunos reportes generados desde la base de datos:
 #### Average Incidents Resolution Time by each Battalion
-![alt text](https://github.com/jboianover/fire_incidents/blob/master/avg_resolution_time_by_battalion.PNG)
+![alt text](https://github.com/jboianover/fire_incidents/blob/main/avg_resolution_time_by_battalion.PNG)
+
 ---
 #### Fire Incidents per day by Neighborhood District
-![alt text](https://github.com/jboianover/fire_incidents/blob/master/fire_incidents_per_day_by_neighborhood.PNG)
+![alt text](https://github.com/jboianover/fire_incidents/blob/main/fire_incidents_per_day_by_neighborhood.PNG)
 
 ---
 ## Installation Steps
