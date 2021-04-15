@@ -14,6 +14,7 @@ def create_mysql_connection():
     #Building connection_string
     db_connection_str = 'mysql+mysqlconnector://'+user_name+':'+pwd+'@'+hostname+'/'+db_name
     db_connection = sqlalchemy.create_engine(db_connection_str)
+
     return db_connection
 
 ###########################################################################################
@@ -27,15 +28,26 @@ def refresh_db(database_name):
 ###########################################################################################    
 
 def read_table_to_df(dim):
-    db_connection = create_mysql_connection
-
-    return pd.read_sql('SELECT Id, '+ dim + ' FROM '+ dim, con=db_connection)
+    #db_connection = create_mysql_connection
+    hostname = get_param('DB', 'mysql_hostname')
+    db_name = get_param('DB', 'db_name')
+    user_name= get_param('DB', 'user_name')
+    pwd = get_param('DB', 'pwd')
+    
+    db_connection = mysql.connector.connect(
+        host= hostname,
+        user = user_name,
+        password = pwd,
+        database = db_name
+        )
+    query = "select * FROM " + dim
+    return pd.read_sql(query, con=db_connection)
 
 ###########################################################################################
 
 def load_table(table_name, df, table_action):
     db_connection = create_mysql_connection()
-    df.to_sql(name=table_name, con=db_connection, index=False, if_exists=table_action)
+    df.to_sql(name=table_name, con=db_connection, index=False, if_exists=table_action, chunksize=100000)
 
     return 0
 

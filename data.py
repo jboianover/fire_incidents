@@ -101,33 +101,6 @@ def dim_by_column(df, dim_name, column_name, base_id):
     dim_df = clean_df[['Id',column_name]]
     final_df = dim_df.rename(columns = {column_name: dim_name + '_desc'}, inplace = False)
     return final_df
-    
-######################################################################################################################################   
-
-
-
-######################################################################################################################################
-
-def replace_attr_id(df, dim):
-    #df_dim = read_table_to_df(dim)
-
-    #fact left_join dim replace attr with id
-    replaced_df = ''
-    return replaced_df
-
-######################################################################################################################################
-
-def load_fact(df):
-    
-    try:
-        fact_df = lookup_default_dim(df)
-        fact_df = lookup_compound_dim(fact_df)
-        df = fact_df.fillna('', inplace=True)
-        load_table(df, 'fact_fire_incidents', 'replace')
-    except:
-        print("An error occurred while loading fact table")
-
-    return print("Fact table loaded!!!")
 
 #######################################################################################################################################
 
@@ -137,15 +110,20 @@ def lookup_default_dim(df):
     default_dim = get_dictionary(dim_file)
 
     replaced_dims = []
-
+    i = 1
     for key in default_dim:
+        
         if default_dim[key] in df:
-            dim_df = read_table_to_df(key)
-            replaced_df = replace_attrib_for_id(df, dim_df, default_dim[key])
+            table_name = "dim_" + key
+            dim_df = read_table_to_df(table_name)
+            if i == 1:
+                replaced_df = replace_attrib_for_id(df, dim_df, default_dim[key], key + "_desc")
+            else:
+                replaced_df = replace_attrib_for_id(replaced_df, dim_df, default_dim[key], key + "_desc")
             replaced_dims.append(key)
         else:
             raise Exception("ERROR: The column "+ default_dim[key] + " does not exist - Verify and correct " + dim_file)
-    
+        i +=1
     if len(default_dim) != len(replaced_dims):
         raise Exception("ERROR: there were some dimensions that couldn't been created - \n \
             Dimension List: "+ ','.join(list(default_dim.keys()))+ "\nCreated Dimensions" \
@@ -161,30 +139,60 @@ def lookup_compound_dim(df):
     compound_dim = get_dictionary(dim_file)
 
     replaced_dims = []
-    
+    i = 1
     for key in compound_dim:
-            
-            dim_df = read_table_to_df(key)
-            
-            for column_name in compound_dim[key]:
-                if column_name in df:
-                    replaced_df = replace_attrib_for_id(df, dim_df, compound_dim[key])
-                    replaced_dims.append(key)
+        table_name = "dim_" + key
+        dim_df = read_table_to_df(table_name)
+        j = 1    
+        for column_name in compound_dim[key]:
+            if column_name in df:
+                if i == 1 and j == 1:
+                    replaced_df = replace_attrib_for_id(df, dim_df, column_name, key + "_desc")
                 else:
-                    raise Exception("ERROR: The column "+ compound_dim[key] + " does not exist - Verify and correct " + dim_file)
-
+                    replaced_df = replace_attrib_for_id(replaced_df, dim_df, column_name, key + "_desc")
+                j += 1        
+            else:
+                raise Exception("ERROR: The column "+ column_name + " does not exist - Verify and correct " + dim_file)
+        replaced_dims.append(key)
+        i += 1
     if len(compound_dim) != len(replaced_dims):
-            raise Exception("ERROR: there were some dimensions that couldn't been created - \n \
-                Dimension List: "+ ','.join(list(compound_dim.keys()))+ "\nCreated Dimensions" \
+        raise Exception("ERROR: there were some dimensions that couldn't been created - \n \
+                Dimension List: "+ ','.join(list(compound_dim.keys()))+ "\nCreated Dimensions: " \
                     + ','.join(replaced_dims))
     
     return replaced_df
 
 ######################################################################################################################################
 
-def replace_attrib_for_id(source_df, dim_df, column_name):
-
-    replaced_df = 'pandas dataframe'
+def replace_attrib_for_id(source_df, dim_df, column_name, dim_column):
+    
+    joined_df = pd.merge(source_df, dim_df, left_on = column_name, right_on = dim_column, how='left')
+    joined_df = joined_df.drop(columns=[column_name])
+    joined_df[column_name] = joined_df['Id']
+    replaced_df = joined_df.drop(columns=['Id'])
+    replaced_df = replaced_df.drop(columns=[dim_column])
 
     return replaced_df
 
+######################################################################################################################################
+
+def load_fact(df, table_name):
+    
+    try:
+        fact_df = lookup_default_dim(df)
+        fact_df = lookup_compound_dim(fact_df)
+        fact_df['incident_number'] = fact_df['incident_number'].astype(int)
+        fact_df['id'] = fact_df['id'].astype(int)
+        fact_df['incident_date']= pd.to_datetime(fact_df['incident_date'])
+        fact_df['alarm_dttm']= pd.to_datetime(fact_df['alarm_dttm'])
+        fact_df['arrival_dttm']= pd.to_datetime(fact_df['arrival_dttm'])
+        fact_df['close_dttm']= pd.to_datetime(fact_df['close_dttm'])
+        fact_df['point'] = fact_df['point'].astype(str)
+        load_table(table_name, fact_df, 'replace')
+
+    except:
+        log = logging.getLogger()
+        log.exception("Log Exception Message - Default Dims")
+        print("An error occurred while loading fact table")
+
+    return 0
