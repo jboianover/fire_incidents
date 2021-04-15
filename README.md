@@ -16,7 +16,7 @@
     - Se renombraron algunas columnas que decían "Sytem" en lugar de "System" y se le limpiaron los espacios a las mismas.
     - Se detectaron muchos valores de atributos que deberían ser el mismo pero el data cleanse quedó fuera del scope del ejercicio.
 ---
-### Sobre las tablas
+### Sobre las tablas y la solución
 - Se crean dimensiones basadas en default_dimensions.txt y compound_dimensions.txt:
     - default_dimensions: extrae el atributo del source (por ejemplo City) y genera un Id respectivo.
     - compound_dimensions: extrae de más de un atributo del source cuando estos corresponden al mismo concepto (por ejemplo, el concepto action_taken es el mismo para los campos "action_taken_other", "action_taken_secondary", "action_taken_primary").
@@ -28,6 +28,24 @@
 ![alt text](https://github.com/jboianover/fire_incidents/blob/master/avg_resolution_time_by_battalion.PNG)
 ---
 #### Fire Incidents per day by Neighborhood District
-!]alt text](https://github.com/jboianover/fire_incidents/blob/master/fire_incidents_per_day_by_neighborhood.PNG)
+![alt text](https://github.com/jboianover/fire_incidents/blob/master/fire_incidents_per_day_by_neighborhood.PNG)
 
+---
+## Installation Steps
 
+## Para montar un servidor MySQL se asume que se cuenta con docker instalado en la máquina donde se probará la solución
+
+### Levantar una instancia mysql
+
+> docker run --name mysql1 -e MYSQL_ROOT_PASSWORD=root -d mysql:latest
+ 
+Aparentemente por temas de seguridad no se puede acceder a la misma desde fuera de la imagen de docker
+
+- Para poder acceder desde nuestra máquina local:
+> docker logs mysql1 2>&1 | grep GENERATED
+- Se solicitará ejecutar la sentencia ALTER USER con valores root/root
+- Ejecutar:
+> update mysql.user set host = '%' where user='root';
+- Ejecutar:
+> docker restart mysql1
+- Ahora estaremos en condiciones de poder acceder a la base de datas desde MySQL Workbench - descargarlo y comenzar a utilizarlo.
