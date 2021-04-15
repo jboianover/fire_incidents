@@ -32,9 +32,9 @@
 ![alt text](https://github.com/jboianover/fire_incidents/blob/main/fire_incidents_per_day_by_neighborhood.PNG)
 
 ---
-## Installation Steps
+## *Instrucciones de instalación*
 
-## Para montar un servidor MySQL se asume que se cuenta con docker instalado en la máquina donde se probará la solución
+### **Para montar un servidor MySQL se asume que se cuenta con docker instalado en la máquina donde se probará la solución**
 
 ### Levantar una instancia mysql
 
@@ -50,3 +50,16 @@ Aparentemente por temas de seguridad no se puede acceder a la misma desde fuera 
 - Ejecutar:
 > docker restart mysql1
 - Ahora estaremos en condiciones de poder acceder a la base de datas desde MySQL Workbench - descargarlo y comenzar a utilizarlo.
+
+## Librerias de Python a instalar
+- pandas
+- sodapy
+- mysql.connector
+- sqlalchemy
+- numpy
+- ast
+- numpy
+- logging
+- os
+- pathlib
+- configparser
