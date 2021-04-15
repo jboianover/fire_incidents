@@ -1,0 +1,12 @@
+1. get raw data
+2. load dimensions
+3. load fact table (lookup to dimensions for id's)
+4. reports
+
+
+
+- reemplazo espacio por guión bajo en los atributos del Source
+- arreglo el Sytem --> System en el nombre de las columnas
+
+
+

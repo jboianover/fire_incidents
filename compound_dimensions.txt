@@ -1,0 +1,4 @@
+{
+"action_taken": ["action_taken_other", "action_taken_secondary", "action_taken_primary"],
+"ignition_factor": ["ignition_factor_secondary", "ignition_factor_primary"]
+}
