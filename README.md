@@ -22,5 +22,12 @@
     - compound_dimensions: extrae de más de un atributo del source cuando estos corresponden al mismo concepto (por ejemplo, el concepto action_taken es el mismo para los campos "action_taken_other", "action_taken_secondary", "action_taken_primary").
     - en caso de modificarse las reglas de negocio y querer agregar/eliminar una dimensión, se modifican los txt correspondientes que están en forma de dictionary y el proceso lo tomará dinámicamente en la próxima ejecución y el modelo se refrescará acorde a los cambios.
     - los campos que en el source eran atributos convertidos a dimensión se los reemplaza por sus respectivos Id's subrogados.
-
+---
 ### Algunos reportes generados desde la base de datos:
+#### Average Incidents Resolution Time by each Battalion
+![alt text](https://github.com/jboianover/fire_incidents/blob/master/avg_resolution_time_by_battalion.PNG)
+---
+#### Fire Incidents per day by Neighborhood District
+!]alt text](https://github.com/jboianover/fire_incidents/blob/master/fire_incidents_per_day_by_neighborhood.PNG)
+
+

@@ -1,4 +1,16 @@
-1. se crean las mínimas dimensiones que cumplan con los requerimientos del enunciado (batallón y distrito) con id espejado con el index + 1 que se cargaran full antes de cargar la fact
-2. fact table de fire_incidents con carga full todos los días
-3. se recuperan los id's subrogados de las dimensiones directamente desde el dataframe para hacer left join entre fact_df y dim_x_df
-4. para las aggregate queries de time_period dado que conceptualmente refleja cronología, se la accederá con queries directamente desde la fact table - no me pareció relevante crear una dimension de tiempo
+0. Se diseñó un modelo estrella con una fact_table y 27 dimensiones alrededor de ella de la forma Id, xxxx_desc.
+1. Se crea un config.ini con diferentes parámetros a ser utilizados
+2. Ambiente:
+    a. Respecto a la extracción desde el source, se creó una librería que recibe las peticiones de extracción y basados en config.ini utiliza dichos parametros en su conexión y request (por ej limit_size)
+    b. Respecto a la base de datos, se refresca todo el ambiente (el proceso está preparado para recrear el ambiente en cada ejecución)
+    c. Respecto a la calidad de los datos:
+        I. Se renombraron algunas columnas que decían "Sytem" en lugar de "System" y se le limpiaron los espacios a las mismas.
+        II. Se detectaron muchos atributos que deberían ser el mismo pero el data cleanse quedó fuera del scope del ejercicio.
+3. Se crean dimensiones basados en default_dimensions.txt y compound_dimensions.txt:
+    a. default_dimensions: extrae el atributo del source y genera un Id respectivo.
+    b. compound_dimensions: extrae de más de un atributo del source cuando estos corresponden al mismo conceptio (por ejemplo, el concepto action_taken se utiliza en los campos "action_taken_other", "action_taken_secondary", "action_taken_primary").
+    c. en caso de modificarse las reglas de negocio y querer agregar/eliminar una dimensión, se modifican los txt correspondientes que están en forma de dictionary y el proceso lo tomará dinámicamente
+4. Se carga full con modo replace fact_fire_incidents todos los días (se extrae full a menos que se modifique el limit_size - ver punto 1):
+    a. los campos que se corresponden con dimensiones se les reemplaza el valor por el Id correspondiente a su dimensión.
+5. Algunos reportes generados desde la base de datos:
+
